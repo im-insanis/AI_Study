@@ -29,8 +29,11 @@ jobs:
       - name: Prepare site
         run: |
           rm -rf _site
-          mkdir _site
-          unzip -q Statistics/textbook/site.zip -d _site
+          mkdir -p _site
+          cat Statistics/textbook/chunks/part*.b64 > /tmp/site.tar.xz.b64
+          base64 -d /tmp/site.tar.xz.b64 > /tmp/site.tar.xz
+          tar -xJf /tmp/site.tar.xz -C _site
+          test -f _site/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -40,5 +43,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-# retriggered after GitHub Pages was enabled
